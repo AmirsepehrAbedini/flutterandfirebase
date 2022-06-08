@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "299262875441",
+    "project_id": "amirsepehrlearning",
+    "storage_bucket": "amirsepehrlearning.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299262875441:android:0af34fabe17ea064b9c210",
+        "android_client_info": {
+          "package_name": "com.example.advancedflutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "299262875441-smgo1adb6q8bp25mh5sfv60d91hgjlsv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCYU-3eE1TjO7Wuzu3fcMhb7guRfBsAcM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "299262875441-smgo1adb6q8bp25mh5sfv60d91hgjlsv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "299262875441-k1egfppk763b3rmfis6j8m1k4po8dd67.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.learningAdvancedFlutter"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299262875441:android:715c772251f4d736b9c210",
+        "android_client_info": {
+          "package_name": "com.example.learning_advanced_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "299262875441-smgo1adb6q8bp25mh5sfv60d91hgjlsv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCYU-3eE1TjO7Wuzu3fcMhb7guRfBsAcM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "299262875441-smgo1adb6q8bp25mh5sfv60d91hgjlsv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "299262875441-k1egfppk763b3rmfis6j8m1k4po8dd67.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.learningAdvancedFlutter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
