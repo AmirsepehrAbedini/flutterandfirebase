@@ -1,32 +1,20 @@
-import 'package:advancedflutter/main.dart';
-import 'package:advancedflutter/views/loginView.dart';
-import 'package:flutter/material.dart';
-import 'firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(MaterialApp(
-    title: 'Flutter Demo',
-    theme: ThemeData(
-      primarySwatch: Colors.blue,
-    ),
-    home: const loginView(title: 'login'),
-  ));
-}
+import '../firebase_options.dart';
 
-class registerView extends StatefulWidget {
-  const registerView({Key? key, required this.title}) : super(key: key);
+class loginView extends StatefulWidget {
+  const loginView({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  State<registerView> createState() => _registerViewState();
+  State<loginView> createState() => _loginViewState();
 }
 
-class _registerViewState extends State<registerView> {
+class _loginViewState extends State<loginView> {
+
   TextEditingController emailContoroller = TextEditingController();
   TextEditingController passwordContoroller = TextEditingController();
 
@@ -69,7 +57,7 @@ class _registerViewState extends State<registerView> {
                     child: TextField(
                       controller: emailContoroller,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Email',
                       ),
@@ -93,15 +81,19 @@ class _registerViewState extends State<registerView> {
                       onPressed: () async {
                         final password = passwordContoroller.text;
                         final email = emailContoroller.text;
-                       try{
-                         final userCredential= await FirebaseAuth.instance
-                            .createUserWithEmailAndPassword(
-                                email: email, password: password);
-                        }catch(error){
-                          print(error);
+                    try{    await FirebaseAuth.instance
+                            .signInWithEmailAndPassword(
+                            email: email, password: password);
+                           print('sign in with email and password');
                         }
-                      },
-                      child: Text('register')),
+                    on FirebaseAuthException catch (e) {
+                      if(e.code == 'user-not-found'){
+                        print('user not found');
+                      }else if(e.code == 'wrong-password'){
+                        print('wrong password');
+                      }
+    }},
+                      child: Text('Login')),
                 ],
               ), // This trailing comma makes auto-formatting nicer for build methods.
             );
