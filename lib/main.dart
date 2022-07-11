@@ -1,10 +1,12 @@
 import 'package:advancedflutter/main.dart';
 import 'package:advancedflutter/views/loginView.dart';
+import 'package:advancedflutter/views/registerView.dart';
+import 'package:advancedflutter/views/verifyEmailVeiw.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'firebase_options.dart';
+import 'dart:developer' as developer;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,101 +15,91 @@ void main() {
     theme: ThemeData(
       primarySwatch: Colors.blue,
     ),
-    home: const loginView(title: 'login'),
+    home: const Homepage(),
   ));
 }
 
-class registerView extends StatefulWidget {
-  const registerView({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  State<registerView> createState() => _registerViewState();
+enum menuEnum {
+  signin,
+  logout;
 }
 
-class _registerViewState extends State<registerView> {
-  TextEditingController emailContoroller = TextEditingController();
-  TextEditingController passwordContoroller = TextEditingController();
-
-  @override
-  void initState() {
-    emailContoroller = TextEditingController();
-    passwordContoroller = TextEditingController();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    emailContoroller.dispose();
-    passwordContoroller.dispose();
-    super.dispose();
-  }
+class Homepage extends StatelessWidget {
+  const Homepage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: FutureBuilder(
-        future: Firebase.initializeApp(
-          options: DefaultFirebaseOptions.currentPlatform,
+        appBar: AppBar(
+          title: const Text('Home Page'),
+          actions: [
+            PopupMenuButton<menuEnum>(
+                onSelected: (value) async {
+                  if(value == menuEnum.signin){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => registerView(title: "register")));
+                  }
+                  if (value == menuEnum.logout) {
+                    FirebaseAuth.instance.signOut();
+                    bool x = await _onBackPressed(context);
+                    if (x) {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const loginView(
+                                    title: 'login',
+                                  )),
+                          (route) => false);
+                    }
+                  }
+                },
+                itemBuilder: (BuildContext context) =>
+                    <PopupMenuEntry<menuEnum>>[
+                      const PopupMenuItem<menuEnum>(
+                        value: menuEnum.signin,
+                        child: const Text('Sign in'),
+                      ),
+                      const PopupMenuItem(
+                        value: menuEnum.logout,
+                        child: Text("log out"),
+                      )
+                    ])
+          ],
         ),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            return Center(
-              child: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 10),
-                    child: TextField(
-                      controller: emailContoroller,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Email',
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 10),
-                    child: TextField(
-                      controller: passwordContoroller,
-                      obscureText: true,
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Password',
-                      ),
-                    ),
-                  ),
-                  TextButton(
-                      onPressed: () async {
-                        final password = passwordContoroller.text;
-                        final email = emailContoroller.text;
-                       try{
-                         final userCredential= await FirebaseAuth.instance
-                            .createUserWithEmailAndPassword(
-                                email: email, password: password);
-                        }catch(error){
-                          print(error);
-                        }
-                      },
-                      child: Text('register')),
-                ],
-              ), // This trailing comma makes auto-formatting nicer for build methods.
-            );
-          }
-        },
+        body: FutureBuilder(
+          future: Firebase.initializeApp(
+            options: DefaultFirebaseOptions.currentPlatform,
+          ),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              final user = FirebaseAuth.instance.currentUser;
+              return loginView(title: 'Login');
+            } else {
+              return Text("Loading....");
+            }
+          },
+        ));
+  }
+
+  Future<bool> _onBackPressed(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Are you sure?"),
+        content: Text("Do you want to exit and logout?"),
+        actions: [
+          FlatButton(
+            child: Text("No"),
+            onPressed: () => Navigator.pop(context, false),
+          ),
+          FlatButton(
+            child: Text("Yes"),
+            onPressed: () => Navigator.pop(context, true),
+          ),
+        ],
       ),
-    );
+    ).then((value) => value ?? false);
+  }
+  Widget signIn() {
+    return registerView(title: 'Register');
   }
 }
